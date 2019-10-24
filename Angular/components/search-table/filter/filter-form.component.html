@@ -1,0 +1,8 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="form" class="filter-form">
+    <div class="form-row">
+        <filter [ngClass]="filter.className" [filter]="filter" [form]="form" *ngFor="let filter of filters" [filters]="filters"></filter>
+        <span class="col-auto">
+                <button type="submit" class="btn btn-outline-primary" [disabled]="disabled || !form.valid" data-ft="filters_search">Search</button>
+        </span>
+    </div>
+</form>

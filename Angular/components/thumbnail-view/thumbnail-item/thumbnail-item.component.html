@@ -1,0 +1,8 @@
+<div class="card sft-thumbnail" [style.height.px]="152 + 25 * thumbnail.metaData.length">
+    <input #radio *ngIf="selectType === SelectTypeEnum.Single" [checked]="selected" type="radio" name="select-group" (change)="onSelectChange(radio.checked)">
+    <input [attr.aria-label]="title" #checkbox *ngIf="selectType === SelectTypeEnum.Multi" [checked]="selected" type="checkbox" (change)="onSelectChange(checkbox.checked)">
+    <meta-data class="image" [data]="data" [height]="150" [width]="150" [metaData]="thumbnail.imageMetaData"></meta-data>
+    <meta-data class="image-top-text-meta-data" *ngIf="data && thumbnail.imageTopTextMetaData && thumbnail.imageTopTextMetaData.getValue(data) !== ''" [data]="data" [metaData]="thumbnail.imageTopTextMetaData"></meta-data>
+    <meta-data class="image-text-meta-data" [data]="data" [metaData]="thumbnail.imageTextMetaData"></meta-data>
+    <meta-data class="meta-data" *ngFor="let child of thumbnail.metaData" [data]="data" [metaData]="child"></meta-data>
+</div>

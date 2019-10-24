@@ -1,0 +1,68 @@
+
+<custom-table *ngIf="!useReact"
+    [styles]="styles"
+    [isFixedHeader]="isFixedHeader"
+    [columns]="columns"
+    [data]="data"
+    [enableRowDetails]="enableRowDetails"
+    [hasRowDetails]="hasRowDetails"
+    [rowDetailsComponentType]="rowDetailsComponentType">
+</custom-table>
+<div *ngIf="useReact" class="mb-4">
+    <custom-table-react-wrapper
+        [styles]="styles"
+        [columns]="columns"
+        [data]="data"
+        [enableRowDetails]="enableRowDetails"
+        [hasRowDetails]="hasRowDetails"
+        [expandComponent]="expandComponent">
+    </custom-table-react-wrapper>
+</div>
+
+<div class="row mb-2" *ngIf="totalResultsCount > 0 && showPageResults">
+    <div attr.data-ft-total="{{totalResultsCount}}" class="col-md-3">
+        <label>{{totalResultsCount}} {{resources.resultsFound}}</label>
+    </div>
+    <div *ngIf="isPaginationEnabled">
+        <ul *ngIf="totalPageCount > 1" class="pagination justify-content-center">
+            <li class="page-item" *ngIf="currentPage.value > 1">
+                <a class="page-link" (click)="setPageNumber(currentPage.value - 1)" href="javascript:void(0)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item" *ngIf="initialRangeValue > 1">
+                <a class="page-link" (click)="setPageNumber(1)" data-ft="page-number-1" href="javascript:void(0)" aria-label="First">
+                    <span aria-hidden="true">1</span>
+                </a>
+            </li>
+            <li class="page-item" *ngIf="initialRangeValue > 2">
+                <span class="page-link disabled">&hellip;</span>
+            </li>
+            <li class="page-item" *ngFor="let page of paginationRange" attr.data-ft="page-number-{{page}}" [ngClass]="{active: currentPage.value === page}">
+                <a class="page-link" id="page-{{page}}" (click)="setPageNumber(page)" href="javascript:void(0)">{{page}}</a>
+            </li>
+            <li class="page-item" *ngIf="lastRangeValue + 1 < totalPageCount">
+                <span class="page-link disabled">&hellip;</span>
+            </li>
+            <li class="page-item" *ngIf="lastRangeValue < totalPageCount">
+                <a class="page-link" (click)="setPageNumber(totalPageCount)" href="javascript:void(0)" aria-label="Last">
+                    <span aria-hidden="true">{{totalPageCount}}</span>
+                </a>
+            </li>
+            <li class="page-item" *ngIf="currentPage.value < totalPageCount">
+                <a class="page-link" (click)="setPageNumber(currentPage.value + 1)" aria-label="Next" href="javascript:void(0);">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div *ngIf="totalResultsCount > 0 && isPaginationEnabled">
+        <div class="form-inline justify-content-end">
+            <label class="mr-1">{{resources.resultsPerPage}}</label>
+            <select [formControl]="viewSize" class="form-control" data-ft="view-size-select" aria-label="Choose page size" (change)="setPageSize(viewSize.value)">
+                <option *ngFor="let size of paginationService.viewSizes" [value]="size" attr.data-ft="view-size-{{size}}">{{size}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>

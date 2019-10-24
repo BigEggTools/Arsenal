@@ -1,0 +1,128 @@
+@import '../../../styles/variables';
+
+.meta-data {
+    width: 100%;
+    display: grid;
+
+    .title {
+        font-weight: bold;
+    }
+
+    .action-meta-data {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 3px 5px 2px 5px;
+        height: 25px;
+
+        a {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            cursor: pointer;
+
+            &.action {
+                width: 100%;
+                float: left;
+
+                &.has-additional {
+                    width: calc(100% - 40px);
+                }
+            }
+
+            &.additional-action {
+                float: right;
+                max-width: 35px;
+            }
+        }
+    }
+
+    .text-meta-data {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 3px 5px 2px 5px;
+        height: 25px;
+    }
+
+    .link-meta-data {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 3px 5px 2px 5px;
+        height: 25px;
+    }
+
+    .router-meta-data {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 3px 5px 2px 5px;
+        height: 25px;
+    }
+
+    .empty-meta-data {
+        height: 25px;
+    }
+
+    .price-meta-data {
+        padding: 2px 5px;
+        height: 25px;
+
+        .msrp {
+            text-decoration: line-through;
+            font-style: italic
+        }
+    }
+
+    .score-meta-data {
+        padding: 2px 5px;
+        height: 25px;
+        font-size: 14px;
+
+        .fa, .fas, .far {
+            color: $blue;
+        }
+
+        .count {
+            font-size: 12px;
+        }
+    }
+
+    .list-text-meta-data {
+        ul {
+            list-style: disc inside none;
+            margin: 5px 0;
+            .content {
+                padding: 2px 5px;
+                height: 25px;
+            }
+        }
+    }
+
+    .flag-meta-data {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        padding: 2px 5px;
+        height: 25px;
+    }
+
+    .check-list-meta-data {
+        .list {
+            display: grid;
+            padding-left: 5px;
+
+            li {
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+
+                .check {
+                    width: 18px;
+                    vertical-align: text-top;
+                }
+            }
+        }
+    }
+}

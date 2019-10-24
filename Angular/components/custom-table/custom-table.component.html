@@ -1,0 +1,104 @@
+<div [ngClass]="{'fixed-table-container': isFixedHeader, 'color-table': colorTable}">
+    <div class="header-background"></div>
+    <div class="table-container-inner">
+        <table *ngIf="data && columns" class="{{getTableClass()}}" [ngSwitch]="selectType" [class.hasRowDetails]="enableRowDetails">
+            <thead>
+                <tr *ngIf="!hideHeader">
+                    <th *ngSwitchCase="SelectTypeEnum.Single" class="select-title"></th>
+                    <th *ngSwitchCase="SelectTypeEnum.Multi" class="select-title">
+                        <input class="column-select" type="checkbox" [disabled]="!data?.length" [(checked)]="allSelected" (click)="selectAllInSearch($event)"
+                               data-ft="selectAllInSearch_ft" />
+                    </th>
+                    <th *ngIf="enableRowDetails" class="details-toggle-icon"></th>
+                    <th *ngFor="let column of displayedColumns()" [style.width]="column.customWidth" [ngClass]="column.className">
+                        <div *ngIf="column.type === columnType.CHECKBOX && column.onSelectAll" class="th-inner column-select">
+                            <input class="column-select" type="checkbox" [disabled]="!data?.length" [(checked)]="allSelected" (click)="selectAll($event, column.onSelectAll)"
+                                data-ft="selectAll_ft" attr.aria-describedby="selectall" aria-label="select" />
+                        </div>
+                        <div *ngIf="column.type !== columnType.CHECKBOX || !column.onSelectAll" class="th-inner column-head" [ngClass]="{clickable: isSortable(column)}"
+                            (click)="isSortable(column) && sort(column)" attr.data-ft="column-{{column.name | slugify}}">
+                            <span>{{column.name}}</span>
+                            <span *ngIf="isSortable(column)" class="{{getSortGlyph(column.sortOrder)}}"></span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody *ngIf="data && data.length && !loading">
+                <ng-container *ngFor="let row of data; let rowIndex = index">
+                    <tr attr.data-ft="{{row.row_ft}}" [attr.tabindex]="hasRowClickAction(row) ? 0 : null" [ngClass]="{'even': (rowIndex%2), 'odd': !(rowIndex%2), clickable: hasRowClickAction(row), 'table-active': row?.isSelected, 'row-expanded':rowExpanded[rowIndex]}" class="table-row"
+                        (click)="onRowClick(row)" (keyup.enter)="onRowClick(row)" [attr.aria-label]="'select ' + row.ariaLabel">
+                        <td *ngSwitchCase="SelectTypeEnum.Single" class="select-cell">
+                            <input #radio type="radio" *ngIf="!isRowSelectableCheckWrapper(row).disableSelect" [checked]="rowIndex === currentRadioIndex" name="grid-select-group" (change)="onRadioButtonChange(radio.checked, row, rowIndex)">
+                            <span *ngIf="isRowSelectableCheckWrapper(row).disableSelect" [ngClass]="'fa fa-fw ' + isRowSelectableCheckWrapper(row).iconClass" [attr.title]="isRowSelectableCheckWrapper(row).message"></span>
+                        </td>
+                        <td *ngSwitchCase="SelectTypeEnum.Multi" class="select-cell">
+                            <input #checkbox type="checkbox" [(checked)]="rowSelected[rowIndex]" *ngIf="!isRowSelectableCheckWrapper(row).disableSelect" (change)="onCheckboxChange(checkbox.checked, row, rowIndex)">
+                            <span *ngIf="isRowSelectableCheckWrapper(row).disableSelect" [ngClass]="'fa fa-fw ' + isRowSelectableCheckWrapper(row).iconClass" [attr.title]="isRowSelectableCheckWrapper(row).message"></span>
+                        </td>
+                        <td *ngIf="enableRowDetails" (click)="toggleDetails(rowIndex)" class="toggle-details-cell">
+                            <span *ngIf="hasRowDetails(row)" [class.fa-chevron-down]="!rowExpanded[rowIndex]" [class.fa-chevron-up]="rowExpanded[rowIndex]" class="fas fa-s"></span>
+                        </td>
+                        <td *ngFor="let column of displayedColumns()" [ngSwitch]="column.type" [ngClass]="column.className" [style.width]="column.customWidth">
+                            <div *ngSwitchCase="columnType.DATE">
+                                <span attr.data-ft="{{row[column.key+'_ft'] | slugify}}">{{row[column.key] ? moment(getDate(row[column.key])).format(column.format) : null}}</span>
+                            </div>
+                            <div *ngSwitchCase="columnType.CHECKBOX">
+                                <input type="checkbox" [(checked)]="row.isSelected" (click)="onSelectClick(row)" [attr.tabindex]="hasRowClickAction(row) ? -1 : null"
+                                [attr.aria-label]="'checkbox ' + row.ariaLabel" attr.data-ft="{{row[column.key+'_ft']}}"  />
+                            </div>
+                            <div *ngSwitchCase="columnType.RADIO">
+                                <input type="radio" name="column.key" [value]="row[column.key]" attr.data-ft="{{row[column.key+'_ft']}}" />
+                            </div>
+                            <div *ngSwitchCase="columnType.LINK">
+                                <a *ngIf="row.linkRoute" [routerLink]="row.linkRoute" [queryParams]="row.linkParams" (click)=onLinkClick(row) attr.aria-label="Edit {{row[column.key]}}"
+                                    [target]="row.linkTarget || '_self'">
+                                    <span attr.data-ft="{{row[column.key+'_ft']}}">{{row[column.key]}}</span>
+                                </a>
+                                <span *ngIf="!row.linkRoute" attr.data-ft="{{row[column.key+'_ft'] | slugify}}">{{row[column.key]}}</span>
+                            </div>
+                            <div *ngSwitchCase="columnType.EXTERNALLINK">
+                                <a *ngIf="row.externalLinkTarget" attr.aria-label="Edit {{row[column.key]}}" target="_blank" [href]="row.externalLinkTarget">
+                                    <span attr.data-ft="{{row[column.key+'_ft']}}">{{row[column.key]}}</span>
+                                </a>
+                                <span *ngIf="!row.externalLinkTarget" attr.data-ft="{{row[column.key+'_ft'] | slugify}}">{{row[column.key]}}</span>
+                                <button *ngIf="row.copyLink" attr.aria-label="Copy {{row[column.key]}}" title="{{copyButtonTooltip}}" class="btn btn-link fas fa-copy p-0 pl-1 float-right" (click)="onCopyClick(row.copyLink)"></button>
+                            </div>
+                            <div *ngSwitchCase="columnType.DYNAMIC">
+                                <dynamic-column [data]="row" [rowSelected]="rowSelected[rowIndex]" (rowSelectedChange)="rowSelectedChangeHandler($event, row, rowIndex)" [componentType]="column.customComponent" [options]="column.options" [className]="column.className"></dynamic-column>
+                            </div>
+                            <div *ngSwitchCase="columnType.IMAGE">
+                                <img role="presentation" src="{{row[column.key]}}" style="height:50px;"/>
+                            </div>
+                            <div *ngSwitchCase="columnType.ICON" class="text-center">
+                                <i class="fas" [ngClass]="row[column.key]"></i>
+                            </div>
+                            <div *ngSwitchDefault [ngClass]="{'fixed-column': !!column?.customWidth }" [style.width]="column.customWidth">
+                                <span attr.data-ft="{{row[column.key+'_ft'] | slugify}}">{{row[column.key]}}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <ng-container *ngIf="enableRowDetails && rowExpanded[rowIndex]">
+                        <tr class="p-0 m-0 row-details">
+                            <td class="p-0 m-0" [attr.colspan]="getNumberOfColumns()">
+                                <custom-table-row-details [rowDetailsComponentType]="rowDetailsComponentType" [data]="row"></custom-table-row-details>
+                            </td>
+                        </tr>
+                        <tr></tr>
+                    </ng-container>
+                </ng-container>
+            </tbody>
+            <tbody class="support-info" *ngIf="!data || !data.length || loading">
+                <tr class="table-row" *ngIf="!loading && !data">
+                    <td align="center" [attr.colspan]="displayedColumns().length + 1">
+                        No results
+                    </td>
+                </tr>
+                <tr class="table-row" *ngIf="loading">
+                    <td align="center" [attr.colspan]="displayedColumns().length + 1" class="loading-cell">
+                        <core-progress-bar></core-progress-bar>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

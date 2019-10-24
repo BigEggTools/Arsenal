@@ -1,0 +1,28 @@
+// Colors
+$light-grey-3:                          #e8e8e8;
+$light-grey-5:                          #f5f5f5;
+$medium-grey:                           #aaaaaa;
+$baby-blue:                             #e0f2fb;
+$light-blue:                            #cce5ff;
+$opacity-c:                             rgba(0, 0, 0, 0); // Winstrap text color
+$bootstrap-hover-background:            #e6e6e6;
+$datatable-border-style:                solid;
+$datatable-border-width:                1px;
+$datatable-border-color:                #565656;
+
+$datatable-cell-border-style:           $datatable-border-style;
+$datatable-cell-border-width:           $datatable-border-width;
+$datatable-cell-border-color:           $datatable-border-color;
+$datatable-cell-cursor:                 default;
+
+$datatable-header-border-style:         $datatable-border-style;
+$datatable-header-border-width:         $datatable-border-width;
+$datatable-header-border-color:         $datatable-border-color;
+$datatable-header-cursor:               $datatable-cell-cursor;
+$datatable-header-background:           $medium-grey;
+$datatable-header-over-background:      $light-blue;
+$datatable-header-icon-color:           $light-grey-3;
+
+$datatable-row-odd-background:          $light-grey-5;
+$datatable-row-even-background:       white;
+$datatable-row-over-background:         $light-blue;

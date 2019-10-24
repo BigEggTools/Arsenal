@@ -1,0 +1,29 @@
+@import '../../../styles/variables';
+
+.preview-color {
+    height: 15px;
+    width: 15px;
+
+    position: relative;
+    z-index: 2;
+    top: -9px;
+    left: 6px;
+}
+
+.background-color {
+    border: 1px solid $light;
+    height: 17px;
+    width: 17px;
+
+    position: relative;
+    z-index: 1;
+    top: 7px;
+    left: 5px;
+
+    background-image: url('./images/assets/color-picker/color-alpha-mask.png');
+}
+
+.color-picker-input {
+    margin-top: -32px;
+    padding-left: 25px;
+}

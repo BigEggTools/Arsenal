@@ -1,0 +1,47 @@
+<div class="row">
+    <div class="col-md-3">
+        <label>{{resources.resultsFound(totalResultsCount)}}</label>
+    </div>
+    <div class="col-md-6">
+        <ul *ngIf="totalPageCount > 1 && !pageSizeChoiceChanged" class="pagination justify-content-center">
+            <li class="page-item" *ngIf="currentPage > 1">
+                <a class="page-link" (click)="setPageNumber(currentPage - 1)" href="javascript:void(0)" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item first-page" *ngIf="initialRangeValue > 1">
+                <a class="page-link" (click)="setPageNumber(1)" data-ft="page-number-1" href="javascript:void(0)" aria-label="First">
+                    <span aria-hidden="true">1</span>
+                </a>
+            </li>
+            <li class="page-item disabled" *ngIf="initialRangeValue > 2">
+                <span class="page-link">&hellip;</span>
+            </li>
+            <li class="page-item" *ngFor="let page of paginationRange" attr.data-ft="page-number-{{page}}" [ngClass]="{active: currentPage === page}">
+                <a class="page-link" id="page-{{page}}" (click)="setPageNumber(page)" href="javascript:void(0)">{{page}}</a>
+            </li>
+            <li class="page-item disabled" *ngIf="lastRangeValue + 1 < totalPageCount">
+                <span class="page-link">&hellip;</span>
+            </li>
+            <li class="page-item last-page" *ngIf="lastRangeValue < totalPageCount">
+                <a class="page-link" (click)="setPageNumber(totalPageCount)" href="javascript:void(0)" aria-label="Last">
+                    <span aria-hidden="true">{{totalPageCount}}</span>
+                </a>
+            </li>
+            <li class="page-item" *ngIf="currentPage < totalPageCount">
+                <a class="page-link" (click)="setPageNumber(currentPage + 1)" aria-label="Next" href="javascript:void(0);">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-3" *ngIf="totalResultsCount > 0">
+        <div class="form-inline justify-content-end">
+            <label class="mr-1">{{resources.resultsPerPage}}</label>
+            <select [formControl]="viewSize" class="form-control" data-ft="view-size-select" aria-label="Choose page size" (change)="OnPageSizeChoiceChange(viewSize.value)">
+                <option *ngFor="let size of pageSizeChoices" [value]="size" attr.data-ft="view-size-{{size}}">{{size}}
+                </option>
+            </select>
+        </div>
+    </div>
+</div>

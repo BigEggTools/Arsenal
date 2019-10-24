@@ -1,0 +1,10 @@
+<div class="cell">
+    <div class="rich-text-cell" [style.height.px]="25 * options.metaDataArray.length">
+        <div class="image-container">
+            <meta-data *ngIf="options.imageMetaData" class="image" [data]="data" [height]="75" [width]="75" [metaData]="options.imageMetaData"></meta-data>
+        </div>
+        <div class="content-container" [ngClass]="{ 'with-image': options.imageMetaData }">
+            <meta-data *ngFor="let metaData of options.metaDataArray" class="content" [data]="data" [metaData]="metaData"></meta-data>
+        </div>
+    </div>
+</div>

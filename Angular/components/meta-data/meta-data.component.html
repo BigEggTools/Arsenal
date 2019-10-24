@@ -1,0 +1,59 @@
+<div class="meta-data" [ngClass]="metaData.className" [ngSwitch]="metaData.type">
+    <div class="text-meta-data" *ngSwitchCase="MetaDataTypeEnum.Text">
+        <span *ngIf="metaData.title && metaData.getValue(data) !== ''" class="title">{{metaData.title}}</span>
+        <span class="content" title="{{metaData.getValue(data)}}">{{metaData.getValue(data)}}</span>
+    </div>
+    <div class="score-meta-data" *ngSwitchCase="MetaDataTypeEnum.Score">
+        <span *ngIf="metaData.title" class="title">{{metaData.title}}</span>
+        <span title="{{metaData.getValue(data).score}}" [ngClass]="getStarIconClass(metaData.getValue(data).score, 1)"></span>
+        <span title="{{metaData.getValue(data).score}}" [ngClass]="getStarIconClass(metaData.getValue(data).score, 2)"></span>
+        <span title="{{metaData.getValue(data).score}}" [ngClass]="getStarIconClass(metaData.getValue(data).score, 3)"></span>
+        <span title="{{metaData.getValue(data).score}}" [ngClass]="getStarIconClass(metaData.getValue(data).score, 4)"></span>
+        <span title="{{metaData.getValue(data).score}}" [ngClass]="getStarIconClass(metaData.getValue(data).score, 5)"></span>
+        <span class="count" [attr.title]="'Count: ' + metaData.getValue(data).count">({{metaData.getValue(data).count | scale}})</span>
+    </div>
+    <div class="link-meta-data" *ngSwitchCase="MetaDataTypeEnum.Link">
+        <span *ngIf="metaData.getValue(data).title || metaData.title" class="title">{{metaData.getValue(data).title || metaData.title}}</span>
+        <a [target]="metaData.newTab ? '_blank' : ''" [href]="metaData.getValue(data).url" [attr.data-ft]="('link_' + metaData.getValue(data).text) | slugify" title="{{metaData.getValue(data).text}}">{{metaData.getValue(data).text}}</a>
+    </div>
+    <div class="router-meta-data" *ngSwitchCase="MetaDataTypeEnum.RouterLink">
+        <span *ngIf="metaData.title" class="title">{{metaData.title}}</span>
+        <a [target]="metaData.newTab && '_blank'" [routerLink]="metaData.getValue(data).routerLink" queryParamsHandling="merge" [attr.data-ft]="('routerlink_' + metaData.getValue(data).text) | slugify" title="{{metaData.getValue(data).text}}">{{metaData.getValue(data).text}}</a>
+    </div>
+    <div class="empty-meta-data" *ngSwitchCase="MetaDataTypeEnum.Empty">
+    </div>
+    <div class="price-meta-data" *ngSwitchCase="MetaDataTypeEnum.Price">
+        <span *ngIf="metaData.title" class="title">{{metaData.title}}</span>
+        <span class="list" *ngIf="metaData.getValue(data).msrpPrice || metaData.getValue(data).listPrice" title="{{metaData.getValue(data).currencyCode}}">{{metaData.getValue(data).currencyCode}}</span>
+        <span class="msrp" *ngIf="metaData.getValue(data).msrpPrice" title="{{metaData.getValue(data).msrpPrice}}">{{metaData.getValue(data).msrpPrice}}</span>
+        <span class="list" *ngIf="!metaData.getValue(data).msrpPrice && !metaData.getValue(data).listPrice" title="Free">Free</span>
+        <span class="list" *ngIf="metaData.getValue(data).listPrice" title="{{metaData.getValue(data).listPrice}}">{{metaData.getValue(data).listPrice}}</span>
+    </div>
+    <div class="image-meta-data" *ngSwitchCase="MetaDataTypeEnum.Image">
+        <img class="image" [src]="metaData.getValue(data).url" [attr.height]="height" [attr.alt]="metaData.getValue(data).name" [attr.width]="width" [style.background]="metaData.getValue(data).background ? metaData.getValue(data).background : '#E6E6E6'" draggable="false">
+    </div>
+    <div class="list-text-meta-data" *ngSwitchCase="MetaDataTypeEnum.ListText">
+        <ul>
+            <li *ngFor="let text of metaData.getValue(data)"><span class="content">{{text}}</span></li>
+        </ul>
+    </div>
+    <div class="flag-meta-data" *ngSwitchCase="MetaDataTypeEnum.Flag">
+        <span *ngIf="metaData.title && metaData.getValue(data) !== ''" class="title">{{metaData.title}}</span>
+        <span class="fas fa-check-circle fa-fw text-success" *ngIf="metaData.getValue(data)" title="True"></span>
+        <span class="fas fa-times-circle fa-fw text-danger" *ngIf="!metaData.getValue(data)" [title]="metaData.getTooltip(data)"></span>
+    </div>
+    <div class="check-list-meta-data" *ngSwitchCase="MetaDataTypeEnum.CheckList">
+        <ul class="list">
+            <li *ngFor="let item of checkListData">
+                <input class="check" #checkbox type="checkbox" *ngIf="!item.isDisabled" [(checked)]="item.checked" (change)="onCheckboxChange(checkbox.checked, item.data)">
+                <span class="disable" *ngIf="item.isDisabled" class="fas fa-exclamation-circle fa-fw text-danger" [attr.title]="item.disabledTooltips"></span>
+                <span class="message" [attr.title]="item.text">{{item.text}}</span>
+            </li>
+        </ul>
+    </div>
+    <div class="action-meta-data" *ngSwitchCase="MetaDataTypeEnum.Action">
+        <span *ngIf="metaData.title" class="title">{{metaData.title}}</span>
+        <a class="action" [ngClass]="{ 'has-additional': metaData.getValue(data).additionalActionText }" (click)="metaData.action(data)" [attr.data-ft]="('actionLink_' + metaData.getValue(data).text) | slugify" title="{{metaData.getValue(data).text}}">{{metaData.getValue(data).text}}</a>
+        <a class="additional-action" *ngIf="metaData.getValue(data).additionalActionText" (click)="metaData.additionalAction(data)" [attr.data-ft]="('actionLink_additional_action_' + metaData.getValue(data).additionalActionText) | slugify">{{metaData.getValue(data).additionalActionText}}</a>
+    </div>
+</div>

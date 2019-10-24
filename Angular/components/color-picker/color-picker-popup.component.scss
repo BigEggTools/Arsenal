@@ -1,0 +1,60 @@
+@import '../../../styles/variables';
+@import '../../styles/constants';
+
+.color-picker-popup {
+    position: absolute;
+    z-index: 100000;
+    height: 230px;
+    height: auto;
+
+    border: $dark solid 1px;
+    background-color: $white;
+    font-size: 11px;
+
+    .arrow {
+        position: absolute;
+        z-index: 999999;
+
+        width: 0;
+        height: 0;
+        border-style: solid;
+
+        &.arrow-top {
+            left: 8px;
+
+            border-width: 10px 5px;
+            border-color: $dark $opacity-c $opacity-c $opacity-c;
+        }
+
+        &.arrow-left {
+            top: 8px;
+            left: 100%;
+
+            border-width: 5px 10px;
+            border-color: $opacity-c $opacity-c $opacity-c $dark;
+        }
+
+        &.arrow-right {
+            top: 8px;
+            left: -20px;
+
+            border-width: 5px 10px;
+            border-color: $opacity-c $dark $opacity-c $opacity-c;
+        }
+
+        &.arrow-bottom {
+            top: -20px;
+            left: 8px;
+
+            border-width: 10px 5px;
+            border-color: $opacity-c $opacity-c $dark $opacity-c;
+        }
+    }
+
+    .action-container {
+        button {
+            float: right;
+            margin: 4px;
+        }
+    }
+}

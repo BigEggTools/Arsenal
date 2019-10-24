@@ -1,0 +1,40 @@
+.sort-container {
+    margin-bottom: 15px;
+    margin-top: 15px;
+
+    .input-wrapper {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+
+        .label {
+            margin-right: 5px;
+            color: black;
+            width: auto;
+            display: flex;
+            font-size: 14px;
+            padding-left: 0;
+        }
+
+        .form-control {
+            width: auto;
+            display: flex;
+            flex-grow: 1;
+            font-size: 12px;
+            font-weight: normal;
+        }
+
+        select {
+            option {
+                &.placeholder {
+                    color: darkgray;
+                }
+            }
+        }
+    }
+}
+
+.support-info {
+    padding: 8px 0;
+}

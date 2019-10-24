@@ -1,0 +1,42 @@
+<div [formGroup]="form" [ngSwitch]="filter.type" [ngClass]="(isInvalid ? ' error' : '')">
+    <label *ngSwitchCase="FilterTypeEnum.Text" class="w-100" [attr.for]="filter.name">
+        <span class="mr-1" *ngIf="filter.label">{{filter.label}}</span>
+        <input [id]="filter.name" class="form-control" type="text" [attr.placeholder]="filter.placeholder" (change)="onChange($event)"
+            [attr.title]="filter.name" [formControlName]="filter.name" [attr.data-ft]="('filter_input_' + filter.name) | slugify">
+    </label>
+
+    <div class="w-100" *ngSwitchCase="FilterTypeEnum.CheckBox">
+        <input [id]="filter.name" type="checkbox" [formControlName]="filter.name" [attr.data-ft]="('filter_check_' + filter.name) | slugify" (change)="onChange($event)">
+        <label *ngIf="filter.label" class="align-text-top" [attr.for]="filter.name">{{filter.label}}</label>
+    </div>
+
+    <label *ngSwitchCase="FilterTypeEnum.ComboBox" class="w-100 form-inline" [attr.for]="filter.name">
+        <span class="mr-1" *ngIf="filter.label">{{filter.label}}</span>
+        <select [id]="filter.name" class="form-control" [formControlName]="filter.name" [attr.data-ft]="('filter_select_' + filter.name) | slugify" (change)="onChange($event)">
+            <option class="placeholder" value="" [attr.disabled]="!filter.canBeEmpty ? true : null" selected>{{filter.placeholder ? filter.placeholder : (filter.canBeEmpty ? 'Not Specified' : 'Select')}}</option>
+            <option *ngFor="let select of filter.selection" [value]="select.value">{{select.name}}</option>
+        </select>
+    </label>
+
+    <label *ngSwitchCase="FilterTypeEnum.Select2" class="w-100 form-inline" [attr.for]="filter.name">
+        <span class="mr-1" *ngIf="filter.label">{{filter.label}}</span>
+        <select be-select2 [ngModel]="filter.value" [placeholder]="filter.placeholder" [allowClear]="filter.canBeEmpty" [id]="filter.name" class="form-control" [formControlName]="filter.name" [attr.data-ft]="('filter_select_' + filter.name) | slugify" (change)="onChange($event)">
+            <option *ngFor="let select of filter.selection" [value]="select.value">{{select.name}}</option>
+        </select>
+    </label>
+
+    <div class="text-danger w-100" *ngIf="isInvalid">
+        <div *ngIf="filterControl.errors.required">
+            {{(!filter.label && !filter.placeholder) ? 'Required' : (filter.label || filter.placeholder) + ' is required'}}
+        </div>
+        <div *ngIf="filterControl.errors.minlength">
+            {{(!filter.label && !filter.placeholder) ? 'At least' + filterControl.errors.minlength.requiredLength + ' characters long' : (filter.label || filter.placeholder) + ' must be at least ' + filterControl.errors.minlength.requiredLength + ' characters long'}}
+        </div>
+        <div *ngIf="filterControl.errors.maxlength">
+            {{(!filter.label && !filter.placeholder) ? 'Exceeds the maximum length ' + filterControl.errors.maxlength.requiredLength + ' characters long' : (filter.label || filter.placeholder) + ' exceeds the maximum length ' + filterControl.errors.maxlength.requiredLength}}
+        </div>
+        <div *ngIf="filterControl.errors.custormValidation">
+            {{filterControl.errors.custormValidation.message}}
+        </div>
+    </div>
+</div>

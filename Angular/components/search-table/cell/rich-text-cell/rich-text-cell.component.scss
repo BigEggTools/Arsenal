@@ -1,0 +1,20 @@
+.cell {
+    .rich-text-cell {
+        min-height: 75px;
+
+        .image-container {
+            width: 75px;
+            margin-right: 5px;
+            float: left;
+        }
+
+        .content-container {
+            float: left;
+            width: 100%;
+            
+            &.with-image {
+                width: calc(100% - 80px);
+            }
+        }
+    }
+}

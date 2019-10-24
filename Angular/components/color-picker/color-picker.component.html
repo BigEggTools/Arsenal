@@ -1,0 +1,5 @@
+<div class="color-picker-wrapper">
+    <div class="background-color"></div>
+    <div class="preview-color" [style.background-color]="color"></div>
+    <input [attr.id]="inputId" #colorInput [ngClass]="inputClass" class="color-picker-input" type="text" color-picker [color]="color" (colorChange)="onColorChange($event)" [value]="color" [attr.name]="name" [disabled]="disabled" [position]="position" [withAlpha]="withAlpha">
+</div>

@@ -1,0 +1,12 @@
+<div #popup class="color-picker-popup" [style.visibility]="!show ? 'hidden' : 'visible'" [style.top.px]="top" [style.left.px]="left" [style.position]="positionStyle">
+    <div class="arrow {{arrowPositionClass}}" [style.top.px]="arrowTop"></div>
+
+    <form #colorPicker="ngForm">
+        <color-picker-panel id="colorPickerPanel" name="colorPickerPanel" #colorPickerPanel="ngModel" [(ngModel)]="color" (colorChange)="onColorChange()" [withAlpha]="withAlpha"></color-picker-panel>
+
+        <div class="action-container">
+            <button type="button" class="cancel btn btn-outline-primary btn-sm" (click)="onCancelColor($event)">Cancel</button>
+            <button type="button" class="accept btn btn-primary btn-sm" [disabled]="!colorPickerPanel.dirty || !colorPickerPanel.valid" (click)="onAcceptColor($event)">Accept</button>
+        </div>
+    </form>
+</div>

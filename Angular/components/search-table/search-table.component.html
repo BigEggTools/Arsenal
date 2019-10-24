@@ -1,0 +1,27 @@
+<div class="search-table">
+    <h4 class="title" *ngIf="title">{{title}}
+        <span class="small description">{{description}}</span>
+    </h4>
+    <div *ngIf="(filters && filters.length) || (viewModes[ViewModeEnum.Table] && viewModes[ViewModeEnum.Grid])">
+        <div class="filter-toolbar" [ngClass]="{ 'has-view-mode': viewModes[ViewModeEnum.Table] && viewModes[ViewModeEnum.Grid] }">
+            <filter-form *ngIf="filters && filters.length" [filters]="filters" [autoSearch]="autoSearch" [disabled]="loading" (filterChanges)="filterChanges($event)"></filter-form>
+        </div>
+        <div class="view-mode-toolbar" *ngIf="viewModes[ViewModeEnum.Table] && viewModes[ViewModeEnum.Grid]">
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-primary" (click)="changeView(ViewModeEnum.Table)" [disabled]="loading || !viewModes[ViewModeEnum.Table]" [ngClass]="{ 'active': currentViewMode === ViewModeEnum.Table }" data-ft="viewmodel_table">
+                    <span class="fas fa-list" title="table"></span>
+                </button>
+                <button type="button" class="btn btn-outline-primary" (click)="changeView(ViewModeEnum.Grid)" [disabled]="loading || !viewModes[ViewModeEnum.Grid]" [ngClass]="{ 'active': currentViewMode === ViewModeEnum.Grid }" data-ft="viewmodel_grid">
+                    <span class="fas fa-th" title="grid"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="h-70 my-2" style='overflow-y: auto;'>
+        <custom-table *ngIf="currentViewMode === ViewModeEnum.Table" [colorTable]="true" [columns]="columnMetaData" [selectType]="selectType" [data]="result.data" (selectedChange)="selectedDataChanged($event)" (sortChange)=sortChanged($event) [loading]="loading" [isRowSelectable]="isRowSelectable"></custom-table>
+        <thumbnail-view *ngIf="currentViewMode === ViewModeEnum.Grid" [thumbnailView]="thumbnailView" [selectType]="selectType" [dataSet]="result.data" (selectedChange)="selectedDataChanged($event)" (sortChange)=sortChanged($event) [loading]="loading"></thumbnail-view>
+    </div>
+    <pagination [hidden]="loading" [totalResultsCount]="result.totalNumber" [pageSize]="result.pageSize" [currentPage]="result.currentPage"
+        (pageSizeChoiceChange)="pageSizeChanged($event)" (selectedPageChanged)="selectedPageChanged($event)" [pageSizeChoices]="pageSizeChoices">
+    </pagination>
+</div>

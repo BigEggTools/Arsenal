@@ -1,0 +1,21 @@
+.ellipsis-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.wrap-text {
+    white-space: initial;
+    overflow: hidden;
+    text-overflow: initial;
+}
+
+.fas,
+.far,
+.far {
+    width: 20px;
+    height: 30px;
+    text-align: center;
+    padding-left: 6px;
+    padding-top: 7px;
+}

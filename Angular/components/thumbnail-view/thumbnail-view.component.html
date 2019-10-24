@@ -1,0 +1,36 @@
+<div class="thumbnail-view-responsive">
+    <div class="row sort-container" *ngIf="thumbnailView.sortableColumn && thumbnailView.sortableColumn.length > 0">
+        <div class="col-md-2 col-xl-2 sort-selector-container">
+            <label class="input-wrapper" [attr.for]="sort">
+                <span class="label">Sort By</span>
+                <select [id]="sort" class="sort-selector form-control" [disabled]="loading" [ngModel]="currentSortBy" (ngModelChange)="sortByChanged($event)">
+                    <option class="placeholder" value="" disabled selected>NONE</option>
+                    <option *ngFor="let metaData of thumbnailView.sortableColumn" [value]="metaData.name">{{metaData.title}}</option>
+                </select>
+            </label>
+        </div>
+        <div class="col-md-2 col-xl-2 order-selector-container">
+            <label class="input-wrapper" [attr.for]="order">
+                <span class="label">Order</span>
+                <select [id]="order" class="order-selector form-control" [disabled]="loading" [ngModel]="currentOrder" (ngModelChange)="orderChanged($event)">
+                    <option class="placeholder" [value]="OrderEnum.NONE" disabled selected>NONE</option>
+                    <option [value]="OrderEnum.DESC">DESC</option>
+                    <option [value]="OrderEnum.ASC">ASC</option>
+                </select>
+            </label>
+        </div>
+    </div>
+    <div class="thumbnail-view-containner row">
+        <div class="thumbnail-container" *ngIf="dataSet && dataSet.length && !loading">
+            <thumbnail-item *ngFor="let data of dataSet; let itemIndex = index" [selected]="itemIndex === 0" [data]="data" [thumbnail]="thumbnailView.thumbnail" [selectType]="selectType" (selectedChange)="onSelectChange($event)"></thumbnail-item>
+        </div>
+        <div class="support-info" *ngIf="!dataSet || !dataSet.length || loading">
+            <div class="col-md-12 col-xl-12" *ngIf="!loading">
+                No results
+            </div>
+            <div class="col-md-12 col-xl-12" *ngIf="loading">
+                <core-progress-bar></core-progress-bar>
+            </div>
+        </div>
+    </div>
+</div>
